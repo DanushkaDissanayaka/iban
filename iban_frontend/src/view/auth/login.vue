@@ -1,24 +1,31 @@
 <template>
-  <main class="d-flex justify-content-between align-items-center flex-column vh-100" >
-    <div class="container mt-2">
-      <section class="wrapper">
-        <div class="heading">
-          <h2 class="text text-large d-block">Sign In</h2>
-          <p class="text text-normal mt-2">New user? <span><router-link to="/register" class="text text-links">Create an
-                account</router-link></span></p>
-        </div>
-        <form name="signin" class="form" @submit.prevent="login">
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header text-center bg-primary text-white">
+            <h2 class="text text-large d-block">Sign-In</h2>
+          
+          </div>
+          <div class="card-body">
+            <form name="signin" class="form" @submit.prevent="login">
           <input-field title="Email Address" v-model="email.value" :validation="true"
             :validationMessage="email.validationMessage" />
           <input-password title="Password" v-model="password.value" :validation="true"
             :validationMessage="password.validationMessage" />
           <div class="input-control">
-            <button type="submit" class="input-submit btn btn-primary" >Sign In</button>
+            <button type="submit" class="input-submit btn btn-primary" >Sign-In</button>
           </div>
+          <hr>
+          <p class="text text-normal mt-2">New user? <span><router-link to="/register" class="text text-links">Create an
+            account</router-link></span></p>
         </form>
-      </section>
+          </div>
+        </div>
+      </div>
     </div>
-  </main>
+  </div>
+  
 </template>
 
 <script>
