@@ -5,7 +5,7 @@ namespace Helper\Validation;
 class IBANValidationHelper
 {
 
-    function validateIBAN($iban)
+    static function validateIBAN($iban)
     {
         // Remove any spaces or hyphens from the IBAN
         $iban = strtoupper(preg_replace('/[^A-Z0-9]/', '', $iban));

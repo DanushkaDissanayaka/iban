@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Iban\IbanController;
 
 
 /*
@@ -24,3 +25,5 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', [UserController::class, 'profile']);
 });
+
+Route::get('/iban', [IbanController::class, 'index']);
