@@ -5,7 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\Iban;
 use App\Repositories\Contracts\IbanRepositoryInterface;
 
-class IbanRepository implements IbanRepositoryInterface
+class IbanRepository extends BaseRepository  implements IbanRepositoryInterface
 {
     public function create(array $data)
     {
@@ -14,16 +14,21 @@ class IbanRepository implements IbanRepositoryInterface
             $data
         );
     }
-    public function getAll(int $perPage)
+    public function getAll(?array $filters): array
     {
-        $ibans = Iban::with('user')->paginate($perPage);
+        $filters = $this->prepareCollectionFilters($filters);
 
-        return [
-            'data' => $ibans->items(),
-            'current_page' => $ibans->currentPage(),
-            'total_pages' => $ibans->lastPage(),
-            'total_items' => $ibans->total(),
-            'per_page' => $perPage
-        ];
+        $query = Iban::query();
+
+        if ($filters->search_text) {
+            $query->where('number', 'like', "%{$filters->search_text}%")
+                ->orWhereHas('user', function ($q) use ($filters) {
+                    $q->where('name', 'like', "%{$filters->search_text}%");
+                });
+        }
+
+        $ibans =  $ibans = $query->with('user')->paginate($filters->per_page);
+
+        return $this->prepareCollectionResponse($ibans, $filters);
     }
 }

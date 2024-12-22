@@ -17,9 +17,9 @@ class IbanController extends Controller
 
     public function index(Request $request)
     {
-        $per_page = $request->query('per_page');
-        $ibans = $this->ibanService->getAll($per_page);
+        $params = $request->only(['per_page', 'search_text']);
+        $ibans = $this->ibanService->getAll($params);
 
-        return response()->json([$ibans]);
+        return response()->json($ibans);
     }
 }

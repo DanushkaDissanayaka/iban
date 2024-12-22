@@ -7,5 +7,5 @@ use App\Models\User;
 interface IbanRepositoryInterface
 {
     public function create(array $data);
-    public function getAll(int $perPage);
+    public function getAll(?array $filters): array;
 }

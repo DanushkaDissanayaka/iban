@@ -26,4 +26,4 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/profile', [UserController::class, 'profile']);
 });
 
-Route::get('/iban', [IbanController::class, 'index']);
+Route::get('/ibans', [IbanController::class, 'index']);

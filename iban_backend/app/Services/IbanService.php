@@ -2,24 +2,25 @@
 
 namespace App\Services;
 
-use App\Repositories\Eloquent\IbanRepository;
+use App\Repositories\Contracts\IbanRepositoryInterface;
 use App\Services\Contracts\IbanServiceInterface;
 
 class IbanService implements IbanServiceInterface
 {
-    private IbanRepository $ibanRepository;
-    public function __construct(IbanRepository $ibanRepository)
+    private IbanRepositoryInterface $ibanRepository;
+    public function __construct(IbanRepositoryInterface $ibanRepository)
     {
         $this->ibanRepository = $ibanRepository;
     }
-    public function create(array $data) {
+    public function create(array $data)
+    {
         // check if iban number is valid
         // if valid save number in to database
         $this->ibanRepository->create($data);
     }
 
-    public function getAll(?int $perPage) {
-
-        return $this->ibanRepository->getAll($perPage ?? config('config.default_per_page'));
+    public function getAll(?array $filters): array
+    {
+        return $this->ibanRepository->getAll($filters);
     }
 }
