@@ -21,25 +21,32 @@ class IbanController extends Controller
 
     public function index(Request $request)
     {
-        $params = $request->only(['per_page', 'search_text']);
-        $ibans = $this->ibanService->getAll($params);
-
-        return response()->json($ibans);
+        try {
+            $params = $request->only(['per_page', 'search_text']);
+            $ibans = $this->ibanService->getAll($params);
+            return response()->json($ibans);
+        } catch (\Throwable $th) {
+            return $this->ise($th);
+        }
     }
 
     public function ibanValidate(IbanValidationRequest $request)
     {
-        $iban = $request->get('iban');
-        // IBAN is validate from Iban validation request store in database
-        $data = [
-            'number' => $iban,
-            'user_id' => auth()->user()->id
-        ];
+        try {
+            // IBAN is validate from Iban validation request store in database
+            $iban = $request->get('iban');
+            $data = [
+                'number' => $iban,
+                'user_id' => auth()->user()->id
+            ];
 
-        $this->ibanService->create($data);
-        
-        return response()->json([
-            'result' => trans('validation-message.valid_iban',['iban' => $iban])
-        ]);
+            $this->ibanService->create($data);
+
+            return response()->json([
+                'result' => trans('validation-message.valid_iban', ['iban' => $iban])
+            ]);
+        } catch (\Throwable $th) {
+            return $this->ise($th);
+        }
     }
 }

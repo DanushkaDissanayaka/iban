@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 
 class Iban extends Model
 {
@@ -13,5 +14,17 @@ class Iban extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+
+    public function setNumberAttribute($value)
+    {
+        $this->attributes['number'] = Crypt::encryptString($value);
+    }
+
+
+    public function getNumberAttribute($value)
+    {
+        return Crypt::decryptString($value);
     }
 }

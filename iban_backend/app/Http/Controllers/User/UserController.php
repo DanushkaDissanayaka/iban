@@ -19,23 +19,33 @@ class UserController extends Controller
     
     public function register(RegisterRequest $request): JsonResponse
     {
-        $userData = $request->only(['name', 'email', 'password']);
-        $user = $this->userService->register($userData);
-        $token = auth()->login($user);
+        try {
+            $userData = $request->only(['name', 'email', 'password']);
+            $user = $this->userService->register($userData);
+            $token = auth()->login($user);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Registration successful',
-            'token' => $token,
-            'user' => $user,
-        ], 201);
+            return response()->json([
+                'success' => true,
+                'message' => 'Registration successful',
+                'token' => $token,
+                'user' => $user,
+            ], 201);
+        } catch (\Throwable $th) {
+            return $this->ise($th);
+        }
+        
     }
 
     public function profile()
     {
-        return response()->json([
-            'status' => 'success',
-            'user' => auth()->user(),
-        ]);
+        try {
+            return response()->json([
+                'success' => true,
+                'user' => auth()->user(),
+            ]);
+        } catch (\Throwable $th) {
+            return $this->ise($th);
+        }
+        
     }
 }
