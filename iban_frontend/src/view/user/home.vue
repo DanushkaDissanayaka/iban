@@ -9,17 +9,16 @@
           <div class="card-body">
             <form @submit.prevent="signup">
               <div class="form-group">
-                <input-field
-                  title="International Bank Account Number"
-                  v-model="iban.value"
-                  :validation="true"
-                  :validationMessage="iban.validationMessage"
-                />
+                <input-field title="International Bank Account Number" v-model="iban.value" :validation="true"
+                  :validationMessage="iban.validationMessage" />
               </div>
               <button type="submit" class="btn btn-primary btn-block mt-3">
                 Check
               </button>
             </form>
+            <div class="mt-4" v-if="validIban.isValid">
+              <h5 class="text-success text-center">{{ validIban.message }}</h5>
+            </div>
           </div>
         </div>
       </div>
@@ -35,7 +34,12 @@ export default {
         value: "",
         validationMessage: "",
       },
+      validIban: {
+        isValid: false,
+        message: ""
+      },
       validationFields: ["iban"],
+
     };
   },
   methods: {
@@ -47,9 +51,11 @@ export default {
       this.$http
         .post(`/validate/iban`, formData)
         .then((response) => {
-          console.log(response);
+          this.validIban.isValid = true;
+          this.validIban.message = response.data.result
         })
         .catch((error) => {
+          this.validIban.isValid = false;
           let otherErrors = true;
           if (error.response.data.error) {
             this.validationFields.forEach((validationField) => {

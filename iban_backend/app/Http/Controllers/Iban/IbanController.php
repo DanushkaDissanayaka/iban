@@ -29,16 +29,17 @@ class IbanController extends Controller
 
     public function ibanValidate(IbanValidationRequest $request)
     {
+        $iban = $request->get('iban');
         // IBAN is validate from Iban validation request store in database
         $data = [
-            'number' => $request->get('iban'),
+            'number' => $iban,
             'user_id' => auth()->user()->id
         ];
 
         $this->ibanService->create($data);
         
         return response()->json([
-            'result' => trans('validation-message.valid_iban')
+            'result' => trans('validation-message.valid_iban',['iban' => $iban])
         ]);
     }
 }

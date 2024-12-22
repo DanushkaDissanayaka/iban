@@ -6,5 +6,5 @@ return [
     "invalid_iban" => "Invalid IBAN",
     "iban_contains_invalid_characters" => "Contains invalid characters",
     "iban_is_required" => "International Bank Account Number (IBAN) is required!",
-    "valid_iban" => "Valid International Bank Account Number (IBAN)",
+    "valid_iban" => ":iban Is valid International Bank Account Number (IBAN)",
 ];
