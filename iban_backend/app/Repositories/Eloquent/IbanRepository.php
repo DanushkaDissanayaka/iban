@@ -27,7 +27,7 @@ class IbanRepository extends BaseRepository  implements IbanRepositoryInterface
                 });
         }
 
-        $ibans =  $ibans = $query->with('user')->paginate($filters->per_page);
+        $ibans = $query->with('user')->orderBy('created_at', 'DESC')->paginate($filters->per_page);
 
         return $this->prepareCollectionResponse($ibans, $filters);
     }

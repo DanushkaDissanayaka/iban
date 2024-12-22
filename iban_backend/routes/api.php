@@ -24,6 +24,6 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', [UserController::class, 'profile']);
+    Route::post('validate/iban', [IbanController::class, 'ibanValidate']);
+    Route::get('/ibans', [IbanController::class, 'index']);
 });
-
-Route::get('/ibans', [IbanController::class, 'index']);
