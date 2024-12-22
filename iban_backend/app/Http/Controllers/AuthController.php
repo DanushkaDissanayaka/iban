@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
 use App\Services\Contracts\AuthServiceInterface;
 use Illuminate\Http\JsonResponse;
+
+use function PHPSTORM_META\type;
 
 class AuthController extends Controller
 {
@@ -18,24 +19,38 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request): JsonResponse
     {
-        $credentials = $request->only(['email', 'password']);
-        $token = $this->authService->login($credentials);
+        try {
+            $credentials = $request->only(['email', 'password']);
+            $token = $this->authService->login($credentials);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Login successful',
-            'token' => $token,
-            'user' => auth()->user(),
-        ]);
+            if (!$token) {
+                return response()->json([
+                    'success' => false,
+                    'message' => trans('message.invalid_email_or_password'),
+                ], 401);
+            }
+            return response()->json([
+                'success' => true,
+                'message' => trans('message.login_successful'),
+                'token' => $token,
+                'user' => auth()->user(),
+            ]);
+        } catch (\Throwable $th) {
+            return $this->ise($th);
+        }
     }
 
     public function logout()
     {
-        auth()->logout();
+        try {
+            auth()->logout();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Logged out successfully',
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Logged out successfully',
+            ]);
+        } catch (\Throwable $th) {
+            return $this->ise($th);
+        }
     }
 }

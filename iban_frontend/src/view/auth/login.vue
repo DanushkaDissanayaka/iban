@@ -33,6 +33,7 @@
 import role from '@/constants/role';
 import { mapState } from "pinia";
 import {useUserStore} from '@/store/user'
+import { ElNotification } from 'element-plus'
 
 export default {
   data: function () {
@@ -75,19 +76,19 @@ export default {
         }
 
       }).catch(error => {
-        let otherErrors = true;
+        if (error.response.status === 401) {
+          ElNotification({
+              title: 'Error',
+              message: error.response.data.message,
+              type: 'error',
+          })
+        }
         if (error.response.data.error) {
           this.validationFields.forEach(validationField => {
             if (error.response.data.error[validationField]) {
               this[validationField].validationMessage = error.response.data.error[validationField].join(', ');
-              otherErrors = false;
             }
           });
-          if (otherErrors) {
-            console.log(error.response.data.error);
-
-            // this.toggleNotification('Error', error.response.data.error, 'error');
-          }
         }
       });
     },

@@ -26,13 +26,6 @@ class AuthService implements AuthServiceInterface
 
     public function login(array $credentials)
     {
-        if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Invalid email or password',
-            ], 401);
-        }
-
-        return $token;
+        return JWTAuth::attempt($credentials);
     }
 }
