@@ -8,7 +8,7 @@
       <div class="row">
         <el-input
           v-model="searchText"
-          placeholder="Search by IBAN or User Name"
+          placeholder="Search by User"
           class="search-box mb-4"
           @input="fetchData"
           clearable

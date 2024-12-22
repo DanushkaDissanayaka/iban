@@ -9,36 +9,20 @@
           <div class="card-body">
             <form @submit.prevent="signup">
               <div class="form-group">
-                <input-field
-                  title="Name"
-                  v-model="name.value"
-                  :validation="true"
-                  :validationMessage="name.validationMessage"
-                />
+                <input-field title="Name" v-model="name.value" :validation="true"
+                  :validationMessage="name.validationMessage" />
               </div>
               <div class="form-group">
-                <input-field
-                  title="Email"
-                  v-model="email.value"
-                  :validation="true"
-                  :validationMessage="email.validationMessage"
-                />
+                <input-field title="Email" v-model="email.value" :validation="true"
+                  :validationMessage="email.validationMessage" />
               </div>
               <div class="form-group">
-                <input-password
-                  title="Password"
-                  v-model="password.value"
-                  :validation="true"
-                  :validationMessage="password.validationMessage"
-                />
+                <input-password title="Password" v-model="password.value" :validation="true"
+                  :validationMessage="password.validationMessage" />
               </div>
               <div class="form-group">
-                <input-password
-                  title="Confirm Password"
-                  v-model="password_confirmation.value"
-                  :validation="true"
-                  :validationMessage="password_confirmation.validationMessage"
-                />
+                <input-password title="Confirm Password" v-model="password_confirmation.value" :validation="true"
+                  :validationMessage="password_confirmation.validationMessage" />
               </div>
 
               <button type="submit" class="btn btn-primary btn-block mt-3">
@@ -47,11 +31,7 @@
               <hr />
               <p class="text text-normal mt-2">
                 Already have an account?
-                <span
-                  ><router-link to="/login" class="text text-links"
-                    >Sign-in</router-link
-                  ></span
-                >
+                <span><router-link to="/login" class="text text-links">Sign-in</router-link></span>
                 here.
               </p>
             </form>
@@ -63,6 +43,10 @@
 </template>
 
 <script>
+
+import { useUserStore } from '@/store/user'
+import { mapState } from "pinia";
+
 export default {
   data: function () {
     return {
@@ -85,6 +69,9 @@ export default {
       validationFields: ["name", "email", "password"],
     };
   },
+  computed: {
+    ...mapState(useUserStore, ['setUser']),
+  },
   methods: {
     signup: function () {
       this.resetValidationErrors();
@@ -100,7 +87,13 @@ export default {
       this.$http
         .post(`/register`, formData)
         .then((response) => {
-          console.log(response);
+          let user = response.data.user
+          user.token = response.data.token
+          this.$http.defaults.headers.authorization = `Bearer ${response.data.token}`
+
+          this.setUser(user);
+          this.$router.push('user/home');
+
         })
         .catch((error) => {
           let otherErrors = true;

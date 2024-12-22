@@ -21,10 +21,9 @@ class IbanRepository extends BaseRepository  implements IbanRepositoryInterface
         $query = Iban::query();
 
         if ($filters->search_text) {
-            $query->where('number', 'like', "%{$filters->search_text}%")
-                ->orWhereHas('user', function ($q) use ($filters) {
-                    $q->where('name', 'like', "%{$filters->search_text}%");
-                });
+            $query->WhereHas('user', function ($q) use ($filters) {
+                $q->where('name', 'like', "%{$filters->search_text}%");
+            });
         }
 
         $ibans = $query->with('user')->orderBy('created_at', 'DESC')->paginate($filters->per_page);
