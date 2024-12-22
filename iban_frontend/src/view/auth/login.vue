@@ -30,8 +30,10 @@
 
 <script>
 
-import { useUserStore } from '@/store/user';
+import role from '@/constants/role';
 import { mapState } from "pinia";
+import {useUserStore} from '@/store/user'
+
 export default {
   data: function () {
     return {
@@ -49,6 +51,9 @@ export default {
       ],
     }
   },
+  computed: {
+    ...mapState(useUserStore, ['setUser']),
+  },
   methods: {
     login: function () {
       this.resetValidationErrors();
@@ -56,11 +61,19 @@ export default {
       formData.append('email', this.email.value);
       formData.append('password', this.password.value);
       this.$http.post(`/login`, formData).then(response => {
-        console.log(response);
+        
+        let user = response.data.user
+        user.token = response.data.token
+        this.$http.defaults.headers.authorization = `Bearer ${response.data.token}`
+        
+        this.setUser(user);
 
-        // this.$http.defaults.headers.authorization = `Bearer ${response.data.access_token}`
-        // this.setUser(response.data);
-        // window.location.href = '/home';
+        if(role.ADMIN === user.role_id) {
+          this.$router.push('/admin/home');
+        } else if(role.USER === user.role_id) {
+          this.$router.push('user/home');
+        }
+
       }).catch(error => {
         let otherErrors = true;
         if (error.response.data.error) {

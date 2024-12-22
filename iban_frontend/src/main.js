@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import { createPinia } from "pinia";
+import {useUserStore} from '@/store/user';
 
 /**
  * Axios
@@ -40,27 +41,36 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fas, fab, far);
 
 const app = createApp(App);
+app.use(createPinia());
+
 
 axios.defaults.baseURL = "http://localhost:8000/api/";
 
-var count = 0;
+axios.defaults.headers = {
+	'content-type': 'application/json',
+	'Authorization': 'Bearer ' + useUserStore().user?.token,
+};
 
+axios.interceptors.request.use(function (config) {
+	return config;
+}, function (error) {
+	return Promise.reject(error);
+});
+
+// Intercept responses
 axios.interceptors.response.use(
-  function (response) {
-    count--;
+  (response) => {
     return response;
   },
-  function (error) {
-    if (error.response.data.code == 403) {
-      window.location.href = "/login";
+  (error) => {
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      router.push('/login');
     }
-    count--;
     return Promise.reject(error);
   }
 );
 
 app.use(ElementPlus);
-app.use(createPinia());
 app.use(VueAxios, axios);
 
 /**
