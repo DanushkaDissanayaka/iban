@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container">
+    <div class="container mt-3">
       <div class="title-section">
     <h1>International Bank Account Number</h1>
     <p>Manage and search IBAN records</p>
@@ -65,7 +65,7 @@ export default {
         this.data = data;
         this.currentPage = current_page;
         this.totalItems = total_items;
-        this.perPage = per_page;
+        this.perPage = +per_page;
       } catch (error) {
         console.error("Error fetching data:", error);
       }

@@ -4,30 +4,42 @@ const routes = [
     {
         path:'', 
         name:'home', 
-        component: ()=>import('@/view/auth/login.vue')
+        component: ()=>import('@/view/auth/login.vue'),
+        meta:{
+            requiresNavbar: false
+        }
     },
     {
         path:'/login', 
         name:'login',
-        component: ()=>import('@/view/auth/login.vue')
+        component: ()=>import('@/view/auth/login.vue'),
+        meta:{
+            requiresNavbar: false
+        }
     },
     {
         path:'/register',
         name:'register',
-        component: ()=>import('@/view/auth/signup.vue')
+        component: ()=>import('@/view/auth/signup.vue'),
+        meta:{
+            requiresNavbar: false
+        }
     },
     {
         path:'/user/home',
         name:'user-home',
         component: ()=>import('@/view/user/home.vue'),
         meta:{
-            requiresAuth: true
+            requiresNavbar: true
         }
     },
     {
         path:'/admin/home',
         name:'admin-home',
-        component: ()=>import('@/view/admin/home.vue')
+        component: ()=>import('@/view/admin/home.vue'),
+        meta:{
+            requiresNavbar: true
+        }
     },
 ]
 

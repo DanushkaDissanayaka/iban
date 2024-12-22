@@ -21,6 +21,7 @@ import "element-plus/dist/index.css";
  */
 import InputField from "@/components/inputs/input-field.vue";
 import InputPassword from "@/components/inputs/input-password.vue";
+import NavDefault from "@/components/navigation/nav-default.vue";
 
 /**
  * Theme Files
@@ -78,6 +79,7 @@ app.use(VueAxios, axios);
  */
 app.component("input-field", InputField);
 app.component("input-password", InputPassword);
+app.component("nav-default", NavDefault);
 
 /**
  * Font Awesome

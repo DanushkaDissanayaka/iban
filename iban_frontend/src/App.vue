@@ -1,4 +1,5 @@
 <template>
+   <nav-default  v-if="$route.meta.requiresNavbar"></nav-default>
   <router-view></router-view>
 </template>
 
